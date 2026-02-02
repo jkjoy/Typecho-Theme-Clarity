@@ -1,0 +1,461 @@
+/* Typecho pagination markup -> Clarity pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.pagination > li {
+  padding: 0.2rem;
+}
+
+.pagination > li > a {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background-color: #0077b8;
+  color: #fff;
+  border-radius: 1rem;
+}
+
+.pagination > li > a:hover {
+  opacity: 0.9;
+}
+
+.pagination > li.page-item.active > a,
+.pagination > li.current > a {
+  background-color: #003552;
+}
+
+.pagination > li > span {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  opacity: 0.7;
+}
+
+/* Typecho's pageNav uses .page-item for current/prev/next.
+   Clarity's original CSS hides first/last .page-item, which would hide page "1" on the first page. */
+.pagination > li.page-item:first-child,
+.pagination > li.page-item:last-child {
+  display: list-item !important;
+}
+
+.post_sticky_badge {
+  margin-left: 0.5rem;
+  color: #d9230f;
+  font-weight: 600;
+}
+
+.post_reading_time {
+  opacity: 0.85;
+}
+
+/* Links page (Links plugin) */
+.links_wrap {
+  margin-top: 1.25rem;
+}
+
+.links_group_title {
+  margin-bottom: 0.75rem;
+}
+
+.links_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.link_card {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--post-bg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.link_card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 119, 184, 0.35);
+}
+
+html[data-mode="dim"] .link_card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.link_avatar img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999rem;
+  display: block;
+}
+
+.link_body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.link_name {
+  color: var(--header-text);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.link_desc {
+  margin-top: 0.15rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Archives page */
+.archives_wrap {
+  margin-top: 1rem;
+}
+
+.archives_year {
+  margin-top: 1.25rem;
+}
+
+.archives_year_title {
+  margin-bottom: 0.75rem;
+}
+
+.archives_month_title {
+  margin: 0.75rem 0 0.5rem 0;
+  opacity: 0.85;
+  font-size: 1.05rem;
+}
+
+.archives_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.archives_item {
+  margin: 0.35rem 0;
+}
+
+.archives_link {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.35rem 0.4rem;
+  border-radius: 0.5rem;
+}
+
+.archives_link:hover {
+  background: var(--translucent);
+}
+
+.archives_date {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.75;
+  min-width: 3.25rem;
+}
+
+.archives_title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Sidebar TOC */
+.toc_nav {
+  margin-top: 0.75rem;
+  overflow: visible;
+}
+
+.toc_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toc_item {
+  margin: 0.15rem 0;
+}
+
+.toc_link {
+  display: block;
+  padding: 0.25rem 0.35rem;
+  border-radius: 0.4rem;
+  color: var(--text);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.toc_link:hover {
+  background: var(--translucent);
+}
+
+.toc_link.active {
+  color: var(--theme);
+  background: var(--translucent);
+  font-weight: 600;
+}
+
+.toc_level_2 { padding-left: 0; }
+.toc_level_3 { padding-left: 0.75rem; }
+.toc_level_4 { padding-left: 1.5rem; }
+.toc_level_5 { padding-left: 2.25rem; }
+.toc_level_6 { padding-left: 3rem; }
+
+/* Nested comments (Clarity-like) */
+/* Override Clarity's `.post_content ol{list-style:decimal; padding:...}` */
+.post_content ol.comment-thread,
+.post_content ol.comment-thread ol,
+ol.comment-thread {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.post_content ol.comment-thread > li,
+ol.comment-thread > li {
+  margin-top: 1rem;
+  padding-top: 0 !important;
+}
+
+.comment_card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  background: var(--light);
+}
+
+html[data-mode="dim"] .comment_card {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--post-bg);
+}
+
+.comment_header {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+.comment_avatar img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999rem;
+  display: block;
+}
+
+.comment_meta_line {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 1.05rem;
+}
+
+.comment_author {
+  font-weight: 700;
+  color: var(--header-text);
+}
+
+.comment_badge {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999rem;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+}
+
+html[data-mode="dim"] .comment_badge {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.comment_sep {
+  opacity: 0.6;
+}
+
+.comment_time {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.comment_time:hover {
+  color: var(--text-hover);
+  text-decoration: underline;
+}
+
+.comment_awaiting {
+  font-style: normal;
+  opacity: 0.8;
+}
+
+.comment_body {
+  margin-top: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.comment_actions {
+  margin-top: 1rem;
+}
+
+.comment_actions a {
+  color: var(--theme);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.comment_actions a:hover {
+  text-decoration: underline;
+}
+
+.comment_children {
+  margin-top: 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.comment_children .comment_card {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+html[data-mode="dim"] .comment_children .comment_card {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.comment_form_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.comment_form_title {
+  margin: 0;
+}
+
+.comment_form_cancel a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.comment_form_cancel a:hover {
+  color: var(--text-hover);
+  text-decoration: underline;
+}
+
+.comment_form {
+  margin-top: 1rem;
+}
+
+.comment_form_login {
+  margin-bottom: 1rem;
+  opacity: 0.85;
+}
+
+.comment_form_login a {
+  color: var(--theme);
+  text-decoration: none;
+}
+
+.comment_form_login a:hover {
+  text-decoration: underline;
+}
+
+.comment_form_grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 769px) {
+  .comment_form_grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.comment_field label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: var(--header-text);
+}
+
+/* Guard against other themes/plugins overriding form styles */
+#comment-form .comment_field {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.4rem;
+}
+
+#comment-form .comment_field > label {
+  display: block !important;
+  margin: 0 !important;
+}
+
+.comment_field label.required::after {
+  content: " *";
+  color: #d9534f;
+}
+
+.comment_input,
+.comment_textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: block;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.02) !important;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  color: var(--header-text);
+}
+
+html[data-mode="dim"] .comment_input,
+html[data-mode="dim"] .comment_textarea {
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--light);
+}
+
+.comment_input:-webkit-autofill,
+.comment_textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--header-text);
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.02) inset !important;
+}
+
+html[data-mode="dim"] .comment_input:-webkit-autofill,
+html[data-mode="dim"] .comment_textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--light);
+  box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.04) inset !important;
+}
+
+.comment_textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.comment_input:focus,
+.comment_textarea:focus {
+  outline: none;
+  border-color: var(--theme);
+  box-shadow: 0 0 0 3px rgba(0, 119, 184, 0.18);
+}
+
+.comment_form_submit {
+  margin-top: 1rem;
+}
