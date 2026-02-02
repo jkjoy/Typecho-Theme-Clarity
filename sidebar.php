@@ -102,15 +102,17 @@ if ($tagsLimit <= 0) {
                     ->order('table.contents.created', \Typecho\Db::SORT_DESC)
                     ->limit($popularLimit);
 
-                \Widget\Contents\From::alloc(['query' => $popularQuery])->to($popular);
+                $popular = clarity_contents_from(null, $popularQuery);
                 ?>
-                <?php while ($popular->next()): ?>
-                    <li>
-                        <a href="<?php $popular->permalink(); ?>" class="nav-link" title="<?php $popular->title(); ?>">
-                            <?php $popular->title(); ?>
-                        </a>
-                    </li>
-                <?php endwhile; ?>
+                <?php if ($popular && $popular->have()): ?>
+                    <?php while ($popular->next()): ?>
+                        <li>
+                            <a href="<?php $popular->permalink(); ?>" class="nav-link" title="<?php $popular->title(); ?>">
+                                <?php $popular->title(); ?>
+                            </a>
+                        </li>
+                    <?php endwhile; ?>
+                <?php endif; ?>
             </ul>
         <?php endif; ?>
 

@@ -41,7 +41,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
                     ->where('table.contents.type = ?', 'post')
                     ->order('table.contents.created', \Typecho\Db::SORT_DESC);
 
-                \Widget\Contents\From::allocWithAlias('clarity_archives', ['query' => $query])->to($posts);
+                $posts = clarity_contents_from('clarity_archives', $query);
             } catch (\Throwable $e) {
                 $posts = null;
             }
@@ -123,4 +123,3 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 </div>
 
 <?php $this->need('footer.php'); ?>
-

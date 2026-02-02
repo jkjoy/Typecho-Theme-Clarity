@@ -4,7 +4,7 @@
 * 移植自Hugo主题 Clarity
 * @package Clarity
 * @author 老孙
-* @version 1.0.0
+* @version 1.0.1
 * @link https://www.imsun.org
 */
 ?>
@@ -78,9 +78,11 @@
 	                                ->limit($stickyLimit)
 	                                ->offset($stickyOffset);
 
-	                            \Widget\Contents\From::allocWithAlias('clarity_sticky', ['query' => $stickyQuery])->to($stickyPosts);
-	                            while ($stickyPosts->next()) {
-	                                clarity_render_excerpt($stickyPosts, true);
+	                            $stickyPosts = clarity_contents_from('clarity_sticky', $stickyQuery);
+	                            if ($stickyPosts && $stickyPosts->have()) {
+	                                while ($stickyPosts->next()) {
+	                                    clarity_render_excerpt($stickyPosts, true);
+	                                }
 	                            }
 	                        }
 
@@ -118,9 +120,11 @@
 	                                ->limit($nonStickyLimit)
 	                                ->offset($nonStickyOffset);
 
-	                            \Widget\Contents\From::allocWithAlias('clarity_index', ['query' => $normalQuery])->to($normalPosts);
-	                            while ($normalPosts->next()) {
-	                                clarity_render_excerpt($normalPosts);
+	                            $normalPosts = clarity_contents_from('clarity_index', $normalQuery);
+	                            if ($normalPosts && $normalPosts->have()) {
+	                                while ($normalPosts->next()) {
+	                                    clarity_render_excerpt($normalPosts);
+	                                }
 	                            }
 	                        }
 

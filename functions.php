@@ -485,6 +485,160 @@ function clarity_get_sticky_post_cids(): array
     return $cache;
 }
 
+function clarity_db()
+{
+    if (class_exists('\\Typecho\\Db') && method_exists('\\Typecho\\Db', 'get')) {
+        return \Typecho\Db::get();
+    }
+    if (class_exists('Typecho_Db') && method_exists('Typecho_Db', 'get')) {
+        return \Typecho_Db::get();
+    }
+    return null;
+}
+
+function clarity_widget_instance(string $alias, $params = null, $request = null)
+{
+    if (class_exists('\\Typecho\\Widget')) {
+        return \Typecho\Widget::widget($alias, $params, $request);
+    }
+    if (class_exists('Typecho_Widget')) {
+        return \Typecho_Widget::widget($alias, $params, $request);
+    }
+    return null;
+}
+
+function clarity_contents_from($alias, $query)
+{
+    if (class_exists('\\Widget\\Contents\\From')) {
+        if ($alias !== null && $alias !== '') {
+            return \Widget\Contents\From::allocWithAlias($alias, ['query' => $query]);
+        }
+        return \Widget\Contents\From::alloc(['query' => $query]);
+    }
+
+    if (class_exists('Widget_Contents_From')) {
+        if ($alias !== null && $alias !== '') {
+            return \Widget_Contents_From::allocWithAlias($alias, ['query' => $query]);
+        }
+        return \Widget_Contents_From::alloc(['query' => $query]);
+    }
+
+    return clarity_query_iterator_from_query($query, $alias);
+}
+
+function clarity_query_iterator_from_query($query, $aliasPrefix = null)
+{
+    $db = clarity_db();
+    if (!$db) {
+        return null;
+    }
+
+    try {
+        $rows = $db->fetchAll($query);
+    } catch (\Throwable $e) {
+        return null;
+    }
+
+    $prefix = $aliasPrefix ? (string) $aliasPrefix : 'clarity_query';
+    return new Clarity_Query_Iterator($rows, $prefix);
+}
+
+function clarity_widget_from_row($row, string $alias)
+{
+    $cid = 0;
+    if (is_array($row) && isset($row['cid'])) {
+        $cid = (int) $row['cid'];
+    } elseif (is_object($row) && isset($row->cid)) {
+        $cid = (int) $row->cid;
+    }
+
+    if ($cid > 0) {
+        $widget = clarity_widget_instance('Widget_Archive@' . $alias, 'type=post', 'cid=' . $cid);
+        if ($widget && method_exists($widget, 'have') && $widget->have()) {
+            $widget->next();
+            return $widget;
+        }
+    }
+
+    return is_array($row) ? (object) $row : $row;
+}
+
+if (!class_exists('Clarity_Query_Iterator')) {
+    class Clarity_Query_Iterator
+    {
+        private $rows = [];
+        private $index = 0;
+        private $current = null;
+        private $aliasPrefix = '';
+
+        public function __construct(array $rows, $aliasPrefix)
+        {
+            $this->rows = array_values($rows);
+            $this->aliasPrefix = (string) $aliasPrefix;
+        }
+
+        public function have()
+        {
+            return !empty($this->rows);
+        }
+
+        public function next()
+        {
+            if ($this->index >= count($this->rows)) {
+                $this->current = null;
+                $this->index = 0;
+                return false;
+            }
+
+            $row = $this->rows[$this->index++];
+            $this->current = clarity_widget_from_row($row, $this->aliasPrefix . '_' . $this->index);
+            return $this->current;
+        }
+
+        public function __get($name)
+        {
+            if (is_object($this->current)) {
+                return $this->current->{$name} ?? null;
+            }
+            if (is_array($this->current)) {
+                return $this->current[$name] ?? null;
+            }
+            return null;
+        }
+
+        public function __call($name, $args)
+        {
+            if (is_object($this->current) && method_exists($this->current, $name)) {
+                return $this->current->{$name}(...$args);
+            }
+
+            $value = null;
+            if (is_object($this->current) && isset($this->current->{$name})) {
+                $value = $this->current->{$name};
+            } elseif (is_array($this->current) && isset($this->current[$name])) {
+                $value = $this->current[$name];
+            }
+
+            if ($value !== null) {
+                echo $value;
+            }
+
+            return null;
+        }
+
+        public function __isset($name)
+        {
+            if (is_object($this->current)) {
+                return isset($this->current->{$name});
+            }
+            if (is_array($this->current)) {
+                return isset($this->current[$name]);
+            }
+            return false;
+        }
+    }
+}
+
 if (!function_exists('threadedComments')) {
     function threadedComments($comments, $options)
     {
